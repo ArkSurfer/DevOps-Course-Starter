@@ -31,15 +31,13 @@ def add_todo_card():
 
 @app.route('/items/<id>/complete')
 def complete_item(id):
+
+    client.move_card_to_done(id)
     return redirect(url_for('index'))
-#     board_lists = board.list_lists()
-#     todo_list = next((x for x in board_lists if x.name == "Things To Do"), None)
-#     done_list = next((x for x in board_lists if x.name == "Done"), None)
 
-#     cards = todo_list.list_cards()
+#     cards = todo_list of cards
 #     card = next((x for x in cards if x.id == id), None)   
-#     card.change_list(done_list.id)  
+#     card.move card to(done_list.id)  
       
-
 if __name__ == '__main__':
     app.run()
