@@ -11,43 +11,35 @@ app = Flask(__name__)
 app.config.from_object('flask_config.Config')
 
 client = TrelloClient(
-    api_key=os.getenv('API_KEY'),
-    token=os.getenv('TOKEN')
+    os.getenv('API_KEY'),
+    os.getenv('TOKEN')
 )
-
-board = client.get_board((os.getenv('BOARD_ID')))
 
 @app.route('/')
 def index():   
     items = []
-    board_lists = board.list_lists()
-    for list_item in board_lists:
-        for card in list_item.list_cards():
-            items.append(TrelloItem(card.id, list_item.name,card.name))
+    trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
+    for card in trello_cards:
+        items.append(TrelloItem(card["id"], card["idList"], card["name"]))
     return render_template('index.html', items = items)
 
-
 @app.route('/', methods=['POST'])
-def add_list():
-    new_item = request.form.get('todoitem')
-    board_lists = board.list_lists()
-    todo_list = next((x for x in board_lists if x.name == "Things To Do"), None)
-    todo_list.add_card(new_item);  
-    return redirect(url_for('index'))
-
+def add_todo_card():
+     new_card = request.form.get('todoitem')
+     add_card = client.add_card_to_list(os.getenv('TODO_LIST_ID'),new_card)
+     return redirect(url_for('index'))
 
 @app.route('/items/<id>/complete')
 def complete_item(id):
+    return redirect(url_for('index'))
+#     board_lists = board.list_lists()
+#     todo_list = next((x for x in board_lists if x.name == "Things To Do"), None)
+#     done_list = next((x for x in board_lists if x.name == "Done"), None)
 
-    board_lists = board.list_lists()
-    todo_list = next((x for x in board_lists if x.name == "Things To Do"), None)
-    done_list = next((x for x in board_lists if x.name == "Done"), None)
-
-    cards = todo_list.list_cards()
-    card = next((x for x in cards if x.id == id), None)   
-    card.change_list(done_list.id)  
-    return redirect(url_for('index')) 
-
+#     cards = todo_list.list_cards()
+#     card = next((x for x in cards if x.id == id), None)   
+#     card.change_list(done_list.id)  
+      
 
 if __name__ == '__main__':
     app.run()
