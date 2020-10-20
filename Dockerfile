@@ -17,5 +17,5 @@ ENTRYPOINT ["./run_dev.sh"]
 
 FROM base as production
 RUN pip install gunicorn
-EXPOSE 5050
+EXPOSE 8000
 ENTRYPOINT ["./run_prod.sh"]

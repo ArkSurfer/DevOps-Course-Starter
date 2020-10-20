@@ -1,21 +1,15 @@
 # DevOps Apprenticeship: Project Exercise
 
-## Getting started
-
-The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from a bash shell terminal:
-
-### On macOS and Linux
-```bash
-$ source setup.sh
+To create create either a development or production image use below commands: 
 ```
-### On Windows (Using Git Bash)
-```bash
-$ source setup.sh --windows
+docker build --target development --tag todo-app:dev . 
+docker build --target production --tag todo-app:prod .  
 ```
 
-Once the setup script has completed and all packages have been installed, start the Flask app by running:
-```bash
-$ flask run
+Docker run commands:
+```
+docker run --env-file ./.env -p8000:8000 --mount type=bind,source="$(pwd)"todo_app,target=/app/todo_app todo-app:prod
+docker run --env-file ./.env -p5000:5000 --mount type=bind,source="$(pwd)"todo_app,target=/app/todo_app todo-app:dev
 ```
 
 You should see output similar to the following:
