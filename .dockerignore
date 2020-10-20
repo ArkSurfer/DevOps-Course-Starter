@@ -1,0 +1,6 @@
+ .env
+ .env.template
+ .git
+ .vagrant
+ Dockerfile
+ Vagrantfile

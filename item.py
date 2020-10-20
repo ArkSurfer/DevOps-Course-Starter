@@ -1,6 +1,11 @@
+import os
+
 class TrelloItem:
-	def __init__(self, id, status, title):
+	def __init__(self, id, list_id, title):
 		self.id = id
 		self.title = title
-		self.status = status 
-		
+
+		if list_id == os.environ["TODO_LIST_ID"]:
+			self.status = "To Do" 
+		else:
+			self.status = "Done"	
