@@ -11,10 +11,17 @@ RUN poetry install --no-interaction --no-ansi
 COPY . ./app
 WORKDIR /app
 
+# testing stage
+FROM base as test
+ENTRYPOINT ["poetry", "run", "pytest"]
+
+
+# local development stage
 FROM base as development
 EXPOSE 5000
 ENTRYPOINT ["./run_dev.sh"]
 
+# production build stage
 FROM base as production
 RUN pip install gunicorn
 EXPOSE 8000

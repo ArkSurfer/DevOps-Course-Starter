@@ -9,16 +9,33 @@
 
   <div class="row">
     <div class="col-md-12">
+      <h2>Add New Item</h2>
+      <form action="{{ url_for('add_todo_card') }}" method="POST">
+        <div class="form-group form-row align-items-center">
+          <div class="col">
+            <input type="text" name="todoitem" id="title-input" class="form-control" data-test-id="name-input">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-success">Add Item</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
       <h2>Things To Do</h2>
       <ul class="list-group mb-4">
-        {% for item in items %}
+        {% for item in view_model.todo_items %}
           <li class="list-group-item flex-column">
             <div class="d-flex w-80 justify-content-between">
               <h5 class="mt-1 mb-1">{{ item.title }}</h5>
               {% if item.status != 'Done' %}
                 <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
               {% endif %}
-			  {% if item.status == 'Done' %}
+			            {% if item.status == 'Done' %}
                 <a class= "btn btn-primary">Done</a>
               {% endif %}
             </div>
@@ -28,10 +45,72 @@
     </div>
   </div>
 
-  <form action="/" method="POST">
-    <p>Enter new to-do item</p>
-    <p><input type="text" name="todoitem"></p>
-    <p><input type="submit" value="Submit"></p>
-  </form>
+  {% if view_model.show_all_done_items %}
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Completed Items</h2>
+        <ul class="list-group mb-4">
+          {% for item in view_model.done_items %}
+            <li class="list-group-item flex-column">
+              <div class="d-flex w-80 justify-content-between">
+                <h5 class="mt-1 mb-1">{{ item.title }}</h5>
+                {% if item.status != 'Done' %}
+                  <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
+                {% endif %}
+                    {% if item.status == 'Done' %}
+                  <a class= "btn btn-primary">Done</a>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Completed Items</h2>
+      <ul class="list-group mb-4">
+        {% for item in view_model.recent_done_items %}
+          <li class="list-group-item flex-column">
+            <div class="d-flex w-80 justify-content-between">
+              <h5 class="mt-1 mb-1">{{ item.title }}</h5>
+              {% if item.status != 'Done' %}
+                <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
+              {% endif %}
+                  {% if item.status == 'Done' %}
+                <a class= "btn btn-primary">Done</a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <details>
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Completed Items</h2>
+        <ul class="list-group mb-4">
+          {% for item in view_model.older_done_items %}
+            <li class="list-group-item flex-column">
+              <div class="d-flex w-80 justify-content-between">
+                <h5 class="mt-1 mb-1">{{ item.title }}</h5>
+                {% if item.status != 'Done' %}
+                  <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
+                {% endif %}
+                    {% if item.status == 'Done' %}
+                  <a class= "btn btn-primary">Done</a>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <summary>Older Items</summary>
+  </details>
+  </div>
+  {% endif %}
 
 {% endblock %}
