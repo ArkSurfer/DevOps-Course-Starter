@@ -32,12 +32,7 @@
           <li class="list-group-item flex-column">
             <div class="d-flex w-80 justify-content-between">
               <h5 class="mt-1 mb-1">{{ item.title }}</h5>
-              {% if item.status != 'Done' %}
                 <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
-              {% endif %}
-			            {% if item.status == 'Done' %}
-                <a class= "btn btn-primary">Done</a>
-              {% endif %}
             </div>
           </li>
         {% endfor %}
@@ -54,12 +49,7 @@
             <li class="list-group-item flex-column">
               <div class="d-flex w-80 justify-content-between">
                 <h5 class="mt-1 mb-1">{{ item.title }}</h5>
-                {% if item.status != 'Done' %}
-                  <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
-                {% endif %}
-                    {% if item.status == 'Done' %}
-                  <a class= "btn btn-primary">Done</a>
-                {% endif %}
+                <a class= "btn btn-primary">Done</a>
               </div>
             </li>
           {% endfor %}
@@ -75,12 +65,7 @@
           <li class="list-group-item flex-column">
             <div class="d-flex w-80 justify-content-between">
               <h5 class="mt-1 mb-1">{{ item.title }}</h5>
-              {% if item.status != 'Done' %}
-                <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
-              {% endif %}
-                  {% if item.status == 'Done' %}
-                <a class= "btn btn-primary">Done</a>
-              {% endif %}
+              <a class= "btn btn-primary">Done</a>
             </div>
           </li>
         {% endfor %}
@@ -90,18 +75,13 @@
   <details>
     <div class="row">
       <div class="col-md-12">
-        <h2>Completed Items</h2>
+        <h2>Older Completed Items</h2>
         <ul class="list-group mb-4">
           {% for item in view_model.older_done_items %}
             <li class="list-group-item flex-column">
               <div class="d-flex w-80 justify-content-between">
                 <h5 class="mt-1 mb-1">{{ item.title }}</h5>
-                {% if item.status != 'Done' %}
-                  <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
-                {% endif %}
-                    {% if item.status == 'Done' %}
                   <a class= "btn btn-primary">Done</a>
-                {% endif %}
               </div>
             </li>
           {% endfor %}
