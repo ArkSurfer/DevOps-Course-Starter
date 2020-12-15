@@ -1,8 +1,11 @@
-import os
 from threading import Thread
 from selenium import webdriver
+from dotenv import load_dotenv
+import os
 import requests
+import pytest
 
+load_dotenv()
 TRELLO_URL = 'https://api.trello.com/1'
 TRELLO_API_KEY = os.environ.get('TRELLO_API_KEY')
 TRELLO_TOKEN = os.environ.get('TRELLO_TOKEN')
@@ -29,27 +32,13 @@ def delete_trello_board(board_id):
         }
     )
     
-def create_list(list_name):
-    response = requests.post(
-            url=f'{TRELLO_URL}/lists',
-            params={
-                'key': TRELLO_API_KEY,
-                'token': TRELLO_TOKEN,
-                'name': list_name,
-                'idBoard': os.getenv("TRELLO_BOARD_ID"),
-            }
-        )
-    return response.json()['id']
-
-#@pytest.fixture(scope='module')
+@pytest.fixture(scope='module')
 def test_app():
-    
+
+
     # Create the new board & update the board id environment variable
     board_id = create_trello_board()
     os.environ['TRELLO_BOARD_ID'] = board_id
-    
-    create_list('ToDo')
-    create_list('Done')
 
     # construct the new application
     application = app.create_app()
@@ -63,3 +52,13 @@ def test_app():
     # Tear Down
     thread.join(1)
     delete_trello_board(board_id)
+
+@pytest.fixture
+def driver():
+    driver = webdriver.Firefox()
+    yield driver
+
+def test_task_journey(driver, test_app):
+    driver.get('http://localhost:5000/')
+    
+    assert driver.title == 'To-Do App'

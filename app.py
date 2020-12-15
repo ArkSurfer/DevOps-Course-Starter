@@ -5,15 +5,6 @@ from viewmodel import ViewModel
 import os
 
 
-    
-#def get_items(client):   
-#        items = []
-#        trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
-#        for card in trello_cards:
-#            items.append(TrelloItem.from_raw_trello_card(card))
-#        return items
-
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object('flask_config.Config')
