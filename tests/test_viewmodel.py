@@ -1,14 +1,20 @@
+import pytest
+import os
+
 from item import TrelloItem
 from viewmodel import ViewModel
-from datetime import date
+from datetime import datetime
 
-def test_items_by_status():
-    items = [
-        TrelloItem(1,'To Do','Task 1','2020-12-10T17:48:14.363Z'),
-        TrelloItem(2,'Done','Task 2','2020-12-10T17:48:14.363Z')
-    ]
 
-    view_model = ViewModel(items)
-    print(view_model.todo_items)
-    assert view_model.todo_items == [item for item in items if item.status == 'To Do']
-    assert view_model.done_items == [item for item in items if item.status == 'Done']
+@pytest.fixture
+def view_model():
+    return ViewModel(
+        [
+            TrelloItem('to-do-id','To Do','Task 1',datetime.now()),
+            TrelloItem('done-id','Done','Task 2',datetime.now())
+        ]
+    )
+
+def test_to_do_items_returns_items_in_to_do_column(view_model):
+    assert len(view_model.todo_items) == 1
+    assert view_model.todo_items[0].title == 'Task 1'

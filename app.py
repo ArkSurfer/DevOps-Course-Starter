@@ -4,30 +4,31 @@ from trello import TrelloClient
 from viewmodel import ViewModel
 import os
 
-client = TrelloClient(
-        os.getenv('API_KEY'),
-        os.getenv('TOKEN')
-    )
 
     
-def get_items(client):   
-        items = []
-        trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
-        for card in trello_cards:
-            items.append(TrelloItem(card["id"], card["idList"], card["name"], card["dateLastActivity"]))
-        return items
+#def get_items(client):   
+#        items = []
+#        trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
+#        for card in trello_cards:
+#            items.append(TrelloItem.from_raw_trello_card(card))
+#        return items
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object('flask_config.Config')
 
+    client = TrelloClient(
+            os.getenv('API_KEY'),
+            os.getenv('TOKEN')
+        )
+
     @app.route('/')
     def index():   
         items = []
         trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
         for card in trello_cards:
-            items.append(TrelloItem(card["id"], card["idList"], card["name"], card["dateLastActivity"]))
+            items.append(TrelloItem.from_raw_trello_card(card))
         item_view_model = ViewModel(items)
         return render_template('index.html', view_model=item_view_model)
 
