@@ -22,8 +22,6 @@
       </form>
     </div>
   </div>
-
-
   <div class="row">
     <div class="col-md-12">
       <h2>Things To Do</h2>
@@ -31,6 +29,7 @@
         {% for item in view_model.todo_items %}
           <li class="list-group-item flex-column">
             <div class="d-flex w-80 justify-content-between">
+              <div class="row to-do-item">
               <h5 class="mt-1 mb-1">{{ item.title }}</h5>
                 <a href="{{ url_for('complete_item', id=item.id) }}" class="btn btn-primary">Mark Done</a>
             </div>
@@ -39,7 +38,6 @@
       </ul>
     </div>
   </div>
-
   {% if view_model.show_all_done_items %}
   <div class="row">
     <div class="col-md-12">

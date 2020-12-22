@@ -20,8 +20,10 @@ def test_index_page(mock_get_requests, client):
     response = client.get('/')
     response_html = response.data.decode()
 
+    assert "Task 1" in response_html
+
 def mock_get_lists(url, params):
-    if url == 'https://api.trello.com/1/boards/{os.getenv("BOARD_ID")}/cards':
+    if url == f'https://api.trello.com/1/boards/{os.getenv("BOARD_ID")}/cards':
         response = Mock(ok=True)
         response.json.return_value = get_sample_trello_cards_response()
         return response
@@ -34,6 +36,6 @@ def get_sample_trello_cards_response():
             "id": "1",
             "name" : "Task 1",
             "idList" : os.getenv("TODO_LIST_ID"),
-            "dateLastActivity" : datetime.today()
+            "dateLastActivity" : "2020-12-16T11:32:59.866Z"
         }
     ]
