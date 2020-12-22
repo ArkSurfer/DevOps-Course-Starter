@@ -1,2 +1,9 @@
+services:
+- docker
+
+before-script:
+  - docker build --target test --tag my-test-image .
+
 script:
-- echo "hello world"
+  - docker run my-test-image tests/test_viewmodel.py
+  - docker run my-test-image tests/test_integration.py
