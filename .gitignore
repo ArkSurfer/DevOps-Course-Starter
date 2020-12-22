@@ -116,3 +116,4 @@ env/
 .env
 .env.test
 .vagrant
+chromedriver.exe
