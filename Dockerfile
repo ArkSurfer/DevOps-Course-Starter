@@ -35,6 +35,6 @@ ENTRYPOINT ["./run_dev.sh"]
 
 # production build stage
 FROM base as production
-RUN pip install gunicorn
-EXPOSE 8000
+RUN pip install gunicorn flask
+EXPOSE $PORT
 ENTRYPOINT ["./run_prod.sh"]

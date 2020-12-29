@@ -1,9 +1,22 @@
 services:
 - docker
 
+before-install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 before-script:
   - docker build --target test --tag my-test-image .
+  - docker build --tag $DOCKER_USERNAME/todo-app:latest --target production .
 
 script:
   - docker run my-test-image tests/test_viewmodel.py
   - docker run my-test-image tests/test_integration.py
+  # - >
+  #   docker run
+  #   -e API_KEY
+  #   -e TOKEN
+  #   -e BOARD_ID
+  #   my-test-image tests/test_e2e.py
+
+after-script:
+  - docker push $DOCKER_USERNAME/todo-app:latest
