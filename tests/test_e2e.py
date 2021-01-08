@@ -2,6 +2,7 @@ from threading import Thread
 from selenium import webdriver
 from dotenv import load_dotenv, find_dotenv
 from selenium.webdriver.common.keys import Keys
+from trello import TrelloClient
 import os
 import requests
 import pytest
@@ -37,6 +38,9 @@ def test_app():
     # Create the new board & update the board id environment variable
     board_id = create_trello_board()
     os.environ['BOARD_ID'] = board_id
+    board_list = TrelloClient(os.getenv("API_KEY"),os.getenv("TOKEN")).get_board_lists(board_id)
+
+    os.environ['TODO_LIST_ID'] = board_list[0]['id']
 
     # construct the new application
     application = app.create_app()
@@ -70,3 +74,12 @@ def test_task_journey(driver, test_app):
     new_input = driver.find_element_by_name("todoitem")
     new_input.send_keys("Module Test")
     new_input.send_keys(Keys.RETURN)
+
+    #driver.find_element_by_xpath("//button[contains(text(), 'Add Item')]").click()
+    assert find_task_in_section('todo-section', driver) is not None
+
+
+def find_task_in_section(section_name, driver):
+    section = driver.find_element_by_xpath(f"//*[@data-test-id='{section_name}']")
+    tasks = section.find_elements_by_xpath("//*[@data-test-class='task']")
+    return next(task for task in tasks if task.find_element_by_xpath("//*[contains(text(), 'Module Test')]") is not None)
