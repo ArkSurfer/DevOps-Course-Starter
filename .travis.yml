@@ -13,9 +13,9 @@ script:
   - docker run my-test-image tests/test_integration.py
   - >
      docker run
-     -e API_KEY
-     -e TOKEN
-     -e BOARD_ID
+     -e API_KEY=$API_KEY
+     -e TOKEN=$TOKEN
+     -e BOARD_ID=$BOARD_ID
      my-test-image tests/test_e2e.py
 
 after-script:
