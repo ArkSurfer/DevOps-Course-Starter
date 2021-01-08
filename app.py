@@ -1,32 +1,35 @@
 from flask import Flask, render_template, request, redirect, url_for
-import session_items as session
+from item import TrelloItem
+from trello import TrelloClient
+import os
 
 app = Flask(__name__)
 app.config.from_object('flask_config.Config')
 
+client = TrelloClient(
+    os.getenv('API_KEY'),
+    os.getenv('TOKEN')
+)
+
 @app.route('/')
-def index():
-
-    return render_template('index.html', list=session.get_items())
-
-@app.route('/delete/<int:id>')
-def delete_task(id):
-    session.remove_item(id)
-    return render_template('index.html', list=session.get_items())
-
-@app.route('/complete/<int:id>')
-def complete_task(id):
-    update = session.get_item(id)
-    update['status']='Complete'
-    session.save_item(update)
-    return render_template('index.html', list=session.get_items())
+def index():   
+    items = []
+    trello_cards = client.get_all_cards_for_board(os.getenv('BOARD_ID'))
+    for card in trello_cards:
+        items.append(TrelloItem(card["id"], card["idList"], card["name"]))
+    return render_template('index.html', items = items)
 
 @app.route('/', methods=['POST'])
-def add_list():
- # Code to create a new book entry in the database.
-    todo = request.form.get('todoitem')
-    session.add_item(todo)
-    return render_template('index.html', list=session.get_items())
+def add_todo_card():
+     new_card = request.form.get('todoitem')
+     add_card = client.add_card_to_list(os.getenv('TODO_LIST_ID'),new_card)
+     return redirect(url_for('index'))
+
+@app.route('/items/<id>/complete')
+def complete_item(id):
+
+    client.move_card_to_done(id)
+    return redirect(url_for('index')) 
 
 if __name__ == '__main__':
     app.run()
