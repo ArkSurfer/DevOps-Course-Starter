@@ -37,4 +37,4 @@ ENTRYPOINT ["./run_dev.sh"]
 FROM base as production
 RUN pip install gunicorn flask
 EXPOSE $PORT
-ENTRYPOINT ["./run_prod.sh"]
+ENTRYPOINT ["gunicorn -b 0.0.0.0:$PORT 'app:create_app()'"]
