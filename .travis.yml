@@ -10,6 +10,7 @@ services:
 
 before-install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
 
 before-script:
   - docker build --target test --tag my-test-image .
@@ -27,3 +28,12 @@ script:
 
 after-script:
   - docker push $DOCKER_USERNAME/todo-app:latest
+
+deploy:
+  provider: script
+  script: 
+        docker tag 180291/todo-app registry.heroku.com/my-todo-app-1/web;
+        docker push registry.heroku.com/my-todo-app-1/web;
+        heroku container:release web -a my-todo-app-1
+  on:
+    branch: exercise-8
