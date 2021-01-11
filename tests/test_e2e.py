@@ -63,9 +63,6 @@ def driver():
     opts.add_argument('--disable-dev-shm-usage')
     with webdriver.Chrome('./chromedriver', options=opts) as driver:
         yield driver
-    
-    #driver = webdriver.Firefox()
-    #yield driver
 
 def test_task_journey(driver, test_app):
     driver.get('http://localhost:5000/')
@@ -75,9 +72,7 @@ def test_task_journey(driver, test_app):
     new_input.send_keys("Module Test")
     new_input.send_keys(Keys.RETURN)
 
-    #driver.find_element_by_xpath("//button[contains(text(), 'Add Item')]").click()
     assert find_task_in_section('todo-section', driver) is not None
-
 
 def find_task_in_section(section_name, driver):
     section = driver.find_element_by_xpath(f"//*[@data-test-id='{section_name}']")

@@ -12,6 +12,14 @@ docker run --env-file ./.env -p8000:8000 --mount type=bind,source="$(pwd)"todo_a
 docker run --env-file ./.env -p5000:5000 --mount type=bind,source="$(pwd)"todo_app,target=/app/todo_app todo-app:dev
 ```
 
+### Running the tests in a Docker container 
+
+To run the tests in a Docker container, run  `docker build --target test .` to build the container and
+ * `docker run --env-file .env test tests/test_viewmodel.py` to run unit test
+ * `docker run --env-file .env test tests/test_integration.py` to run integration test
+ * `docker run --env-file .env test test tests/test_e2e.py` to run end-to-end test
+
+
 You should see output similar to the following:
 ```bash
  * Serving Flask app "app" (lazy loading)

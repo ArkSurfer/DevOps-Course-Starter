@@ -7,7 +7,6 @@ import os
 
 def create_app():
     app = Flask(__name__)
-   # app.config.from_object('flask_config.Config')
 
     client = TrelloClient(
             os.getenv('API_KEY'),
